@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CreatorOS Support - Neon Cyber Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --neon-pink: #ff00ff;
+            --neon-cyan: #00ffff;
+            --dark-bg: #050505;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background-color: var(--dark-bg);
+            color: #fff;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Particle background */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--neon-cyan);
+            border-radius: 50%;
+            opacity: 0;
+            animation: float 15s infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Glass panels */
+        .glass-panel {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 30px 0;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+                        0 0 20px rgba(255, 0, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .glass-panel:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4),
+                        0 0 30px rgba(255, 0, 255, 0.2),
+                        0 0 40px rgba(0, 255, 255, 0.1);
+        }
+
+        /* Header with shuriken */
+        header {
+            text-align: center;
+            padding: 60px 20px 40px;
+        }
+
+        .shuriken {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 30px;
+            position: relative;
+            animation: rotate 8s linear infinite, pulse 2s ease-in-out infinite;
+        }
+
+        .shuriken svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 0 20px var(--neon-pink))
+                    drop-shadow(0 0 40px var(--neon-cyan));
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { 
+                filter: drop-shadow(0 0 20px var(--neon-pink))
+                        drop-shadow(0 0 40px var(--neon-cyan));
+            }
+            50% { 
+                filter: drop-shadow(0 0 30px var(--neon-pink))
+                        drop-shadow(0 0 60px var(--neon-cyan));
+            }
+        }
+
+        /* Hero text */
+        h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 900;
+            background: linear-gradient(45deg, var(--neon-pink), var(--neon-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(255, 0, 255, 0.5);
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        .tagline {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            color: var(--neon-cyan);
+            text-shadow: 0 0 10px var(--neon-cyan);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Section headers */
+        h2 {
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
+            font-weight: 700;
+            color: var(--neon-pink);
+            text-shadow: 0 0 15px var(--neon-pink);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        /* Contacts section */
+        .contacts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .contact-card {
+            background: linear-gradient(135deg, rgba(255, 0, 255, 0.1), rgba(0, 255, 255, 0.1));
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 0, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.5s ease;
+        }
+
+        .contact-card:hover::before {
+            left: 100%;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(255, 0, 255, 0.3),
+                        0 0 20px rgba(0, 255, 255, 0.2);
+            border-color: var(--neon-pink);
+        }
+
+        .contact-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 10px var(--neon-cyan));
+        }
+
+        .contact-title {
+            font-size: 1.3rem;
+            color: var(--neon-cyan);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .contact-info {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-link {
+            color: var(--neon-pink);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .contact-link:hover {
+            text-shadow: 0 0 10px var(--neon-pink);
+            transform: scale(1.05);
+        }
+
+        /* FAQ section */
+        .faq-item {
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.05), rgba(255, 0, 255, 0.05));
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .faq-item:hover {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+        }
+
+        .faq-question {
+            font-size: 1.2rem;
+            color: var(--neon-cyan);
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .faq-toggle {
+            color: var(--neon-pink);
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-toggle {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.8;
+            font-size: 0.95rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+
+        .footer-glow {
+            color: var(--neon-pink);
+            text-shadow: 0 0 10px var(--neon-pink);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .glass-panel {
+                padding: 25px;
+                margin: 20px 0;
+            }
+
+            .container {
+                padding: 10px;
+            }
+
+            header {
+                padding: 40px 10px 30px;
+            }
+
+            .shuriken {
+                width: 80px;
+                height: 80px;
+            }
+
+            .contacts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Additional glow effects */
+        .neon-text {
+            animation: neonFlicker 4s infinite;
+        }
+
+        @keyframes neonFlicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+                text-shadow: 0 0 10px var(--neon-cyan),
+                            0 0 20px var(--neon-cyan),
+                            0 0 30px var(--neon-cyan);
+            }
+            20%, 24%, 55% {
+                text-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Particle background -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Main content -->
+    <div class="container">
+        <!-- Header with hero section -->
+        <header>
+            <!-- Glowing shuriken icon -->
+            <div class="shuriken">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="shurikenGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#ff00ff;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#00ffff;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <!-- Shuriken shape -->
+                    <path d="M 50 10 L 60 40 L 90 30 L 70 50 L 90 70 L 60 60 L 50 90 L 40 60 L 10 70 L 30 50 L 10 30 L 40 40 Z" 
+                          fill="url(#shurikenGradient)" 
+                          stroke="#fff" 
+                          stroke-width="1"/>
+                    <circle cx="50" cy="50" r="8" fill="#fff"/>
+                </svg>
+            </div>
+            
+            <!-- Hero text -->
+            <h1>CreatorOS Support</h1>
+            <p class="tagline neon-text">Your Gateway to the Future</p>
+            <p class="subtitle">Experience cutting-edge support in a neon-powered cyber realm. We're here to assist you 24/7 with all your CreatorOS needs.</p>
+        </header>
+
+        <!-- Contacts section -->
+        <section class="glass-panel">
+            <h2>Contact Us</h2>
+            <div class="contacts-grid">
+                <div class="contact-card">
+                    <div class="contact-icon">📧</div>
+                    <div class="contact-title">Email Support</div>
+                    <div class="contact-info">
+                        Get help via email
+                        <br>
+                        <a href="mailto:support@creatoroo.com" class="contact-link">support@creatoroo.com</a>
+                    </div>
+                </div>
+
+                <div class="contact-card">
+                    <div class="contact-icon">💬</div>
+                    <div class="contact-title">Live Chat</div>
+                    <div class="contact-info">
+                        Instant messaging support
+                        <br>
+                        <a href="#" class="contact-link">Start Chat</a>
+                    </div>
+                </div>
+
+                <div class="contact-card">
+                    <div class="contact-icon">🌐</div>
+                    <div class="contact-title">Community</div>
+                    <div class="contact-info">
+                        Join our Discord server
+                        <br>
+                        <a href="#" class="contact-link">discord.gg/creatoroo</a>
+                    </div>
+                </div>
+
+                <div class="contact-card">
+                    <div class="contact-icon">📚</div>
+                    <div class="contact-title">Documentation</div>
+                    <div class="contact-info">
+                        Browse our knowledge base
+                        <br>
+                        <a href="#" class="contact-link">docs.creatoroo.com</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ section -->
+        <section class="glass-panel">
+            <h2>Frequently Asked Questions</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>What is CreatorOS?</span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    CreatorOS is a next-generation operating system designed for creators, developers, and innovators. It combines powerful tools with an intuitive interface to help you bring your ideas to life in the digital realm.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>How do I get started with CreatorOS?</span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    Getting started is easy! Simply download the installer from our official website, follow the installation wizard, and you'll be up and running in minutes. Check out our quick start guide in the documentation for a smooth onboarding experience.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>What are the system requirements?</span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    CreatorOS requires a minimum of 8GB RAM, 20GB free disk space, and a modern processor (Intel i5/AMD Ryzen 5 or better). For optimal performance, we recommend 16GB RAM and an SSD. Full specifications are available in our documentation.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Is there a mobile version available?</span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    Yes! CreatorOS Mobile is available for both iOS and Android devices. The mobile companion app lets you access your projects, collaborate with team members, and manage your workflow on the go.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>How can I report a bug or request a feature?</span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    We love hearing from our community! You can report bugs or request features through our GitHub repository, community forum, or by contacting our support team directly. Every submission is reviewed by our development team.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>What support options are available?</span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    We offer multiple support channels including email support, live chat during business hours, an active Discord community, and comprehensive documentation. Premium users also get priority support and dedicated account managers.
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2024 <span class="footer-glow">CreatorOS</span> - Powered by Neon Dreams</p>
+            <p style="margin-top: 10px;">Built with passion in the cyber realm ⚡</p>
+        </footer>
+    </div>
+
+    <!-- JavaScript for interactivity -->
+    <script>
+        // Generate particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                
+                // Randomly choose pink or cyan
+                if (Math.random() > 0.5) {
+                    particle.style.background = '#ff00ff';
+                    particle.style.boxShadow = '0 0 10px #ff00ff';
+                } else {
+                    particle.style.background = '#00ffff';
+                    particle.style.boxShadow = '0 0 10px #00ffff';
+                }
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // FAQ toggle functionality
+        function setupFAQ() {
+            const faqItems = document.querySelectorAll('.faq-item');
+            
+            faqItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    // Close other items
+                    faqItems.forEach(otherItem => {
+                        if (otherItem !== item && otherItem.classList.contains('active')) {
+                            otherItem.classList.remove('active');
+                        }
+                    });
+                    
+                    // Toggle current item
+                    item.classList.toggle('active');
+                });
+            });
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            setupFAQ();
+        });
+
+        // Add smooth scroll behavior
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
